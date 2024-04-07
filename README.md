@@ -78,52 +78,94 @@ Cоздайте ВМ, разверните на ней Elasticsearch. Устан
 4. Воспользуйтесь Yandex Certificate Manager, выпустите сертификат для сайта, если есть доменное имя. Перенастройте работу балансера на HTTPS, при этом нацелен он будет на HTTP веб-серверов.
 
 ## Выполнение работы
-Для развертывания инфраструктуры используются инструменты Terraform и Ansible. Были созданы 6 ВМ:
+Для развертывания инфраструктуры используются инструменты Terraform и Ansible. 
+
+[main.tf](https://github.com/UshkevichVA/sys-diplom/blob/diplom-zabbix/sys-diplom-files/main.tf)
+[Файлы Ansible](https://github.com/UshkevichVA/sys-diplom/tree/diplom-zabbix/sys-diplom-files/ansible)
+
+Были созданы 6 ВМ:
+
 ![img1](sys-diplom-files/f/1.png)
+
 Была развернута VPC. Были созданы 4 подсети, 3 из них приватные (в них помещены сервера web и Elasticsearch), и одна публичная (в нее помещены сервера Zabbix, Kibana, Bastion host и балансировщик).
+
 ![img2](sys-diplom-files/f/2.png)
+
 Настроены Security Groups соответствующих сервисов на входящий трафик только к нужным портам.
+
 ![img3](sys-diplom-files/f/3.png)
+
 Создана Target Group, в нее включены два сервера Web.
+
 ![img4](sys-diplom-files/f/4.png)
+
 Создана Backend Group, настроен backends на target group, ранее созданную. Настроена healthcheck на корень (/) и порт 80, протокол HTTP.
+
 ![img5](sys-diplom-files/f/5.png)
+
 Создан HTTP router. Указан путь — /, backend group — созданную ранее.
+
 ![img6](sys-diplom-files/f/6.png)
+
 Создан Application load balancer для распределения трафика на веб-сервера, созданные ранее. Указан HTTP router, созданный ранее, задан listener тип auto, порт 80.
+
 ![img7](sys-diplom-files/f/7.png)
-Протестирован сайт curl -v <публичный IP балансера>:80
-![img8](sys-diplom-files/f/8.png)
-![img9](sys-diplom-files/f/9.png)
+
 Была создана ВМ Bastion host. С нее мы будем взаимодействовать с другими ВМ, а так же установим на нее Ansible.
 
 Был установлен Ansible на Bastion host:
+
 ![img10](sys-diplom-files/f/10.png)
+
 Для ansible использованы fqdn имена виртуальных машин:
+
 ![img11](sys-diplom-files/f/11.png)
+
 На Web-1 и Web-2 был установлен Nginx:
+
 ![img12](sys-diplom-files/f/12.png)
 ![img13](sys-diplom-files/f/13.png)
 ![img14](sys-diplom-files/f/14.png)
 ![img15](sys-diplom-files/f/15.png)
+
+Протестирован сайт curl -v <публичный IP балансера>:80
+
+![img8](sys-diplom-files/f/8.png)
+![img9](sys-diplom-files/f/9.png)
+
 Установлен Zabbix Сервер:
+
 ![img16](sys-diplom-files/f/16.png)
+
 Настроены агенты на отправление метрик в Zabbix:
+
 ![img17](sys-diplom-files/f/17.png)
+
 Настроен дешборд с отображением метрик:
+
 ![img18](sys-diplom-files/f/18.png)
+
 Установлены Zabbix агенты:
+
 ![img19](sys-diplom-files/f/19.png)
 ![img20](sys-diplom-files/f/20.png)
+
 Установлен Elasticsearch:
+
 ![img21](sys-diplom-files/f/21.png)
+
 Установлен Filebeat на сервера Web:
+
 ![img22](sys-diplom-files/f/22.png)
 ![img23](sys-diplom-files/f/23.png)
+
 Установлена Kibana:
+
 ![img24](sys-diplom-files/f/24.png)
 ![img25](sys-diplom-files/f/25.png)
+
 Создан snapshot дисков всех ВМ. Ограничено время жизни snaphot в неделю. Сами snaphot настроены на ежедневное копирование:
+
 ![img26](sys-diplom-files/f/26.png)
 
 
