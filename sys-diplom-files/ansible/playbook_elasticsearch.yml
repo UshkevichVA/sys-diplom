@@ -1,0 +1,41 @@
+---
+- name: Install elasticsearch
+  hosts: elasticsearch
+  become: yes
+
+  tasks:
+    - name: Update apt cache
+      apt:
+        update_cache: yes
+
+    - name: Install gnupg, apt-transport-https
+      apt:
+        name:
+          - apt-transport-https
+          - gnupg
+        state: present
+
+    - name: Get elasticsearch
+      ansible.builtin.get_url:
+        url: https://mirror.yandex.ru/mirrors/elastic/7/pool/main/e/elasticsearch/elasticsearch-7.17.9-amd64.deb
+        dest: /home/user
+
+    - name: Install elasticsearch
+      apt:
+        deb: /home/user/elasticsearch-7.17.9-amd64.deb
+
+    - name: Systemctl daemon reload
+      systemd:
+        daemon_reload: true
+        name: elasticsearch.service
+        state: started
+
+    - name: Copy config file for elasticsearch
+      copy:
+        src: /home/user/ansible/elasticfiles/elasticsearch.yml
+        dest: /etc/elasticsearch
+
+    - name: Systemctl enable elasticsearch
+      systemd:
+        name: elasticsearch.service
+        state: restarted

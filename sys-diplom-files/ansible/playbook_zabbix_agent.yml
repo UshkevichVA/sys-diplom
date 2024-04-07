@@ -1,0 +1,23 @@
+---
+- name: Install Zabbix agent
+  hosts: web
+  become: yes
+
+  tasks:
+    - name: Install required packages
+      apt:
+        name: ["zabbix-agent"]
+        state: present
+
+    - name: Correct config file zabbix agent
+      ansible.builtin.lineinfile:
+        path: /etc/zabbix/zabbix_agentd.conf
+        regexp: "^Server="
+        line: Server=192.168.10.3
+
+    - name: enable and restart zabbix-agent
+      ansible.builtin.systemd:
+        name: zabbix-agent
+        enabled: true
+        masked: no
+        state: restarted

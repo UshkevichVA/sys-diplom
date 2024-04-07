@@ -1,0 +1,31 @@
+---
+
+- name: Install Filebeat
+  hosts: web
+  become: yes
+
+  tasks:
+  - name: Get Filebeat
+    ansible.builtin.get_url:
+      url: https://mirror.yandex.ru/mirrors/elastic/7/pool/main/f/filebeat/filebeat-7.17.9-amd64.deb
+      dest: /home/user
+
+  - name: Install Filebeat
+    apt:
+      deb: /home/user/filebeat-7.17.9-amd64.deb
+
+  - name: Systemctl daemon reload
+    systemd:
+      daemon_reload: true
+      name: filebeat.service
+      state: started
+
+  - name: Copy config file for filebeat
+    copy:
+      src: /home/user/ansible/elasticfiles/filebeat.yml
+      dest: /etc/filebeat
+
+  - name: Restart Filebeat
+    systemd:
+      name: filebeat.service
+      state: restarted

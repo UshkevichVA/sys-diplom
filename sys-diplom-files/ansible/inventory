@@ -1,0 +1,10 @@
+[web]
+   web-1 ansible_host=web-1.ru-central1.internal
+   web-2 ansible_host=web-2.ru-central1.internal
+[zabbix-server]
+   zabbix ansible_host=zabbix.ru-central1.internal
+[elasticsearch]
+   elasticsearch ansible_host=elasticsearch.ru-central1.internal
+[kibana]
+   kibana ansible_host=kibana.ru-central1.internal
+

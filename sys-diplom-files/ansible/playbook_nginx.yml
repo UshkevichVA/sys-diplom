@@ -1,0 +1,26 @@
+- name: Install and configure Nginx
+  hosts: web
+  remote_user: user
+  become: yes
+  become_method: sudo
+
+  tasks:
+    - name: Install Nginx
+      apt:
+        name: nginx
+        state: present
+
+    - name: Copy nginx configuration file
+      copy:
+        src: /home/user/ansible/nginx/nginx.conf
+        dest: /etc/nginx/nginx.conf
+
+    - name: Copy website files
+      copy:
+        src: /home/user/ansible/nginx/www/html/
+        dest: /var/www/html/
+
+    - name: Start Nginx service
+      service:
+        name: nginx
+        state: started
