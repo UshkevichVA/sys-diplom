@@ -137,6 +137,11 @@ Cоздайте ВМ, разверните на ней Elasticsearch. Устан
 
 ![img16](sys-diplom-files/f/16.png)
 
+Установлены Zabbix агенты:
+
+![img19](sys-diplom-files/f/19.png)
+![img20](sys-diplom-files/f/20.png)
+
 Настроены агенты на отправление метрик в Zabbix:
 
 ![img17](sys-diplom-files/f/17.png)
@@ -144,11 +149,6 @@ Cоздайте ВМ, разверните на ней Elasticsearch. Устан
 Настроен дешборд с отображением метрик:
 
 ![img18](sys-diplom-files/f/18.png)
-
-Установлены Zabbix агенты:
-
-![img19](sys-diplom-files/f/19.png)
-![img20](sys-diplom-files/f/20.png)
 
 Установлен Elasticsearch:
 
