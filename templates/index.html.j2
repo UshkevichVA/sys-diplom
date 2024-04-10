@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html>
+<head>
+<style>
+    body {
+        background-color: lightblue;
+    }
+</style>
+</head>
+<body>
+
+<h1>
+{% if ansible_hostname == 'web-1' %}
+    Server 1
+{% elif ansible_hostname == 'web-2' %}
+    Server 2
+{% endif %}
+</h1>
+
+</body>
+</html>

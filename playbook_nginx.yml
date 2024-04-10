@@ -1,0 +1,33 @@
+- name: Install and configure Nginx
+  hosts: web
+  remote_user: user
+  become: yes
+  become_method: sudo
+
+  tasks:
+    - name: apt update
+      apt:
+        update_cache: yes
+
+    - name: Install Nginx
+      apt:
+        name: nginx
+        state: present
+
+    - name: Copy nginx configuration file
+      template:
+        src: /home/user/ansible/templates/nginx.conf.j2
+        dest: /etc/nginx/nginx.conf
+      notify: Restart Nginx
+
+    - name: Copy website files
+      template:
+        src: /home/user/ansible/templates/index.html.j2
+        dest: /var/www/html/index.html
+      notify: Restart Nginx
+
+  handlers:
+    - name: Restart Nginx
+      service:
+        name: nginx
+        state: restarted
